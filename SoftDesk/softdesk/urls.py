@@ -15,20 +15,35 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
-from rest_framework import routers
+from rest_framework_nested import routers
 from rest_framework_simplejwt.views import TokenRefreshView, \
     TokenObtainPairView
+from projects import views
+from data import views as data_views
 
-from projects.urls import router as project_router
 
 router = routers.DefaultRouter()
-router.registry.extend(project_router.registry)
+router.register(r'signup', data_views.UserViewSet)
+router.register(r'project', views.ProjectViewSet)
+
+project_router = routers.NestedSimpleRouter(router, r'project',
+                                            lookup='project')
+project_router.register(r'issue', views.IssueViewSet, basename='project-issue')
+project_router.register(r'users', views.ContributorViewSet,
+                        basename='project-contributor')
+
+issue_router = routers.NestedSimpleRouter(project_router, r'issue',
+                                          lookup='issue')
+issue_router.register(r'comment', views.CommentViewSet,
+                      basename='issue-comment')
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include(router.urls)),
+    path('', include(project_router.urls)),
+    path('', include(issue_router.urls)),
     path('api-auth/', include('rest_framework.urls')),
-    path('login/', TokenObtainPairView.as_view(),
+    path('api/token/', TokenObtainPairView.as_view(),
          name='token_obtain_pair'),
     path('api/token/refresh/', TokenRefreshView.as_view(),
          name='token_refresh'),

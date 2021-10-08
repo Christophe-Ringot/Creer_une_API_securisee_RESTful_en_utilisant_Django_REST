@@ -1,6 +1,7 @@
-from rest_framework import viewsets
-from rest_framework.permissions import IsAuthenticated
+from rest_framework import viewsets, permissions
 
+from projects.permissions import ProjectPermission, IssuePermission,\
+    ContributorPermission, CommentPermission
 from projects.models import Project, Contributor, Issue, Comment
 from projects.serializers import ProjectSerializer, ContributorSerializer,\
     IssueSerializer, CommentSerializer
@@ -10,7 +11,7 @@ class ProjectViewSet(viewsets.ModelViewSet):
 
     queryset = Project.objects.all()
     serializer_class = ProjectSerializer
-    permission_classes = (IsAuthenticated, )
+    permission_classes = [ProjectPermission & permissions.IsAuthenticated]
     filterset_fields = ['date', 'completed']
 
 
@@ -18,7 +19,7 @@ class ContributorViewSet(viewsets.ModelViewSet):
 
     queryset = Contributor.objects.all()
     serializer_class = ContributorSerializer
-    permission_classes = (IsAuthenticated, )
+    permission_classes = [ContributorPermission & permissions.IsAuthenticated]
     filterset_fields = ['role', 'permission']
 
     def get_queryset(self, *args, **kwargs):
@@ -35,7 +36,7 @@ class IssueViewSet(viewsets.ModelViewSet):
 
     queryset = Issue.objects.all()
     serializer_class = IssueSerializer
-    permission_classes = (IsAuthenticated, )
+    permission_classes = [IssuePermission & permissions.IsAuthenticated]
     filterset_fields = ['priority', 'tag', 'status']
 
     def get_queryset(self, *args, **kwargs):
@@ -52,7 +53,7 @@ class CommentViewSet(viewsets.ModelViewSet):
 
     queryset = Comment.objects.all()
     serializer_class = CommentSerializer
-    permission_classes = (IsAuthenticated, )
+    permission_classes = [CommentPermission & permissions.IsAuthenticated]
 
     def get_queryset(self, *args, **kwargs):
         issue = self.kwargs.get("issue_pk")
