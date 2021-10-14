@@ -52,13 +52,12 @@ class ContributorPermission(permissions.BasePermission):
 
 
 class IssuePermission(permissions.BasePermission):
-    
+
     def has_permission(self, request, view):
         id_p = view.kwargs.get("project_pk")
         try:
             info_c = Contributor.objects.get(
-                user_id=request.user, project_id=id_p
-                )
+                user_id=request.user, project_id=id_p)
         except Contributor.DoesNotExist:
             return False
         if info_c.permission in ["Al", "Rd"]:

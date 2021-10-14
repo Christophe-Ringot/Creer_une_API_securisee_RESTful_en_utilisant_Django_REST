@@ -14,6 +14,11 @@ class ProjectViewSet(viewsets.ModelViewSet):
     permission_classes = [ProjectPermission & permissions.IsAuthenticated]
     filterset_fields = ['date', 'completed']
 
+    def get_queryset(self, *args, **kwargs):
+        contributors = Contributor.objects.filter(user_id=self.request.user)
+        info_p = [contributor.project_id.id for contributor in contributors]
+        return Project.objects.filter(id__in=info_p)
+
 
 class ContributorViewSet(viewsets.ModelViewSet):
 
