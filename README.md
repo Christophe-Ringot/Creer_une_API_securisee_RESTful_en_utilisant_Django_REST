@@ -36,7 +36,7 @@ Installez les dépendances de à l'aide de la commande :
 ## Exécution :
 
 Se rendre sur le dossier avec la commande :
-```$ cd Softdesk```
+```$ cd SoftDesk```
 
 Créer un nouveau compte administrateur :
 ```$ python3 manage.py createsuperuser```
