@@ -38,11 +38,14 @@ Installez les dépendances de à l'aide de la commande :
 Se rendre sur le dossier avec la commande :
 ```$ cd SoftDesk```
 
+Effectuer les migrations :
+```$ python manage.py makemigrations``` & ```$ python manage.py migrate```
+
 Créer un nouveau compte administrateur :
-```$ python3 manage.py createsuperuser```
+```$ python manage.py createsuperuser```
 
 Lancez le serveur avec la commande :
-```$ python3 manage.py runserver```
+```$ python manage.py runserver```
 
 
 ## Lien Postman :
